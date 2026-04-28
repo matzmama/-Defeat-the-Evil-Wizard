@@ -12,7 +12,7 @@ A simple text-based RPG battle game built in Python where you choose a character
   - 🏹 Archer
   - ⚔️ Paladin
 
-- Unique abilities for each class
+- Each class has **two unique abilities**
 - Turn-based combat system
 - Randomized damage and healing
 - Enemy AI (Evil Wizard) with regeneration
@@ -38,26 +38,42 @@ A simple text-based RPG battle game built in Python where you choose a character
 
 1. Make sure you have Python installed (Python 3.x recommended)
 
-2. Save the file (e.g., `game.py`)
+2. Save the file as:
+
+
+evil_wizard_game.py
+
 
 3. Run the game:
 
 ```bash
-python game.py
-
-🎯 Gameplay
-Choose your character class
+python evil_wizard_game.py
+🎯 How to Play
+Choose your character class:
+1 = Warrior
+2 = Mage
+3 = Archer
+4 = Paladin
 Enter your character name
-Battle the Evil Wizard using:
-Attack
-Special Ability
-Heal
-View Stats
+Each turn you will choose an action:
+1. Attack
+2. Special Ability
+3. Heal
+4. View Stats
+Special abilities give you powerful or defensive options depending on your class
+The Evil Wizard will:
+Attack you each turn
+Regenerate health automatically
+The game ends when:
+You defeat the wizard ✅
+OR your health reaches 0 ❌
 ⚔️ Character Abilities
 🛡️ Warrior
 Heavy Slash → High damage attack
+Shield Block → Defensive ability
 🔮 Mage
-Fireball → Powerful ranged attack
+Fireball → Strong attack
+Lightning Strike → Very high damage attack
 🏹 Archer
 Quick Shot → Attacks twice
 Evade → Avoid next attack
@@ -67,7 +83,7 @@ Divine Shield → Blocks next attack
 🧙 Enemy: Evil Wizard
 Attacks with dark magic
 Regenerates health every turn
-Slightly randomized attack damage
+Uses randomized damage
 🧠 Concepts Used
 Object-Oriented Programming (OOP)
 Inheritance
@@ -79,9 +95,5 @@ User input handling
 Add more enemies or levels
 Introduce inventory/items
 Add experience points and leveling system
-Improve UI (maybe convert to GUI or web app)
+Improve UI (GUI or web version)
 Add sound effects or animations
-📌 Notes
-This is a console-based game (no GUI)
-Input is required during gameplay
-Random values make each playthrough unique

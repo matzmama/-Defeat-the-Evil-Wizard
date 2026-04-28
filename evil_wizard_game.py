@@ -9,7 +9,6 @@ class Character:
         self.max_health = health
 
     def attack(self, opponent):
-        # damage randomized around attack_power
         low = max(1, self.attack_power - 5)
         high = self.attack_power + 5
         damage = random.randint(low, high)
@@ -28,35 +27,57 @@ class Character:
         print(f"{self.name}'s Stats - Health: {self.health}/{self.max_health}, Attack Power: {self.attack_power}")
 
 
-# Warrior class (inherits from Character)
+# Warrior class
 class Warrior(Character):
     def __init__(self, name):
         super().__init__(name, health=140, attack_power=25)
 
-    def special_ability(self, wizard):
-        # Warrior has a heavy slash
+    def heavy_slash(self, wizard):
         print(f"{self.name} uses Heavy Slash!")
-        bonus = 15
-        damage = random.randint(self.attack_power, self.attack_power + bonus)
+        damage = random.randint(self.attack_power, self.attack_power + 15)
         wizard.health -= damage
         print(f"It deals {damage} damage!")
-        if wizard.health <= 0:
-            print(f"{wizard.name} has been defeated!")
+
+    def shield_block(self):
+        print(f"{self.name} braces with Shield Block! Reduced damage next turn!")
+
+    def special_ability(self, wizard):
+        print("1. Heavy Slash\n2. Shield Block")
+        choice = input("Choose ability: ")
+        if choice == '1':
+            self.heavy_slash(wizard)
+        elif choice == '2':
+            self.shield_block()
+        else:
+            print("Invalid ability.")
 
 
-# Mage class (inherits from Character)
+# Mage class
 class Mage(Character):
     def __init__(self, name):
         super().__init__(name, health=100, attack_power=35)
 
-    def special_ability(self, wizard):
-        # Mage casts a fireball
+    def fireball(self, wizard):
         print(f"{self.name} casts Fireball!")
         damage = random.randint(self.attack_power + 5, self.attack_power + 15)
         wizard.health -= damage
         print(f"Fireball hits for {damage} damage!")
-        if wizard.health <= 0:
-            print(f"{wizard.name} has been defeated!")
+
+    def lightning_strike(self, wizard):
+        print(f"{self.name} casts Lightning Strike!")
+        damage = random.randint(self.attack_power + 10, self.attack_power + 20)
+        wizard.health -= damage
+        print(f"Lightning Strike hits for {damage} damage!")
+
+    def special_ability(self, wizard):
+        print("1. Fireball\n2. Lightning Strike")
+        choice = input("Choose ability: ")
+        if choice == '1':
+            self.fireball(wizard)
+        elif choice == '2':
+            self.lightning_strike(wizard)
+        else:
+            print("Invalid ability.")
 
 
 # Archer class
@@ -66,8 +87,8 @@ class Archer(Character):
         self.evading = False
 
     def quick_shot(self, wizard):
-        print(f"{self.name} uses Quick Shot! Two arrows fly.")
-        for i in range(2):
+        print(f"{self.name} uses Quick Shot!")
+        for _ in range(2):
             self.attack(wizard)
 
     def evade(self):
@@ -82,7 +103,7 @@ class Archer(Character):
         elif choice == '2':
             self.evade()
         else:
-            print("Invalid ability. Turn wasted.")
+            print("Invalid ability.")
 
 
 # Paladin class
@@ -96,12 +117,10 @@ class Paladin(Character):
         damage = random.randint(self.attack_power + 5, self.attack_power + 10)
         wizard.health -= damage
         print(f"Holy Strike deals {damage} damage!")
-        if wizard.health <= 0:
-            print(f"{wizard.name} has been defeated!")
 
     def divine_shield(self):
         self.shielded = True
-        print(f"{self.name} raises a Divine Shield! Next attack will be blocked.")
+        print(f"{self.name} raises a Divine Shield!")
 
     def special_ability(self, wizard):
         print("1. Holy Strike\n2. Divine Shield")
@@ -111,10 +130,10 @@ class Paladin(Character):
         elif choice == '2':
             self.divine_shield()
         else:
-            print("Invalid ability. Turn wasted.")
+            print("Invalid ability.")
 
 
-# EvilWizard class (inherits from Character)
+# Evil Wizard class
 class EvilWizard(Character):
     def __init__(self, name):
         super().__init__(name, health=150, attack_power=15)
@@ -126,14 +145,12 @@ class EvilWizard(Character):
         print(f"{self.name} regenerates 5 health! Current health: {self.health}")
 
     def attack(self, opponent):
-        # wizard attack can be slightly variable
         damage = random.randint(self.attack_power - 3, self.attack_power + 3)
         opponent.health -= damage
-        print(f"{self.name} hurls dark energy at {opponent.name} for {damage} damage!")
-        if opponent.health <= 0:
-            print(f"{opponent.name} has been defeated!")
+        print(f"{self.name} attacks {opponent.name} for {damage} damage!")
 
 
+# Character selection
 def create_character():
     print("Choose your character class:")
     print("1. Warrior")
@@ -141,31 +158,32 @@ def create_character():
     print("3. Archer")
     print("4. Paladin")
 
-    class_choice = input("Enter the number of your class choice: ")
+    choice = input("Enter choice: ")
     name = input("Enter your character's name: ")
 
-    if class_choice == '1':
+    if choice == '1':
         return Warrior(name)
-    elif class_choice == '2':
+    elif choice == '2':
         return Mage(name)
-    elif class_choice == '3':
+    elif choice == '3':
         return Archer(name)
-    elif class_choice == '4':
+    elif choice == '4':
         return Paladin(name)
     else:
         print("Invalid choice. Defaulting to Warrior.")
         return Warrior(name)
 
 
+# Battle system
 def battle(player, wizard):
-    while wizard.health > 0 and player.health > 0:
+    while player.health > 0 and wizard.health > 0:
         print("\n--- Your Turn ---")
         print("1. Attack")
-        print("2. Use Special Ability")
+        print("2. Special Ability")
         print("3. Heal")
-        print("4. View Stats")
+        print("4. Stats")
 
-        choice = input("Choose an action: ")
+        choice = input("Choose action: ")
 
         if choice == '1':
             player.attack(wizard)
@@ -176,30 +194,30 @@ def battle(player, wizard):
         elif choice == '4':
             player.display_stats()
         else:
-            print("Invalid choice. Try again.")
+            print("Invalid choice.")
 
         if wizard.health > 0:
             wizard.regenerate()
-            # handle dodge/shield
+
             if isinstance(player, Archer) and player.evading:
                 print(f"{player.name} evades the attack!")
                 player.evading = False
             elif isinstance(player, Paladin) and player.shielded:
-                print(f"{player.name} blocks the attack with Divine Shield!")
+                print(f"{player.name} blocks the attack!")
                 player.shielded = False
             else:
                 wizard.attack(player)
 
         if player.health <= 0:
             print(f"{player.name} has been defeated!")
-            break
 
     if wizard.health <= 0:
-        print(f"The wizard {wizard.name} has been defeated by {player.name}!")
-    elif player.health <= 0:
-        print(f"{player.name} was defeated. Game Over.")
+        print(f"You defeated {wizard.name}! 🎉")
+    else:
+        print("Game Over 💀")
 
 
+# Main function
 def main():
     player = create_character()
     wizard = EvilWizard("The Dark Wizard")
